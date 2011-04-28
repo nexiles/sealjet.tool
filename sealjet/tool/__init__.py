@@ -50,16 +50,16 @@ def do_query_import(api, args):
     print api.query_import(args.username, args.partnumber)
 
 def do_import(api, args):
-    pass
+    print api.capsule_import(args.username, args.partnumber)
 
 def do_export(api, args):
-    pass
+    print api.capsule_export(args.username, args.partnumber, args.version)
 
 def do_unlock_design(api, args):
-    pass
+    print api.unlock_design(args.username, args.partnumber)
 
 def do_lock_design(api, args):
-    pass
+    print api.lock_design(args.username, args.partnumber)
 
 def main():
     parser = argparse.ArgumentParser()
