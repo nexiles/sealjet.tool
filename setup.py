@@ -25,6 +25,7 @@ setup(name='sealjet.tool',
       install_requires=[
           'setuptools',
           'argparse',
+          'httplib2',
           # -*- Extra requirements: -*-
       ],
       entry_points={
