@@ -5,11 +5,9 @@ version = '0.1'
 
 setup(name='sealjet.tool',
       version=version,
-      description="",
+      description="sealjet PDM commandline tool",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from
-      # http://pypi.python.org/pypi?:action=list_classifiers
       classifiers=[
         "Programming Language :: Python",
         ],
@@ -25,6 +23,7 @@ setup(name='sealjet.tool',
       install_requires=[
           'setuptools',
           'argparse',
+          'httplib2',
           # -*- Extra requirements: -*-
       ],
       entry_points={
