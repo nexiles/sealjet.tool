@@ -21,13 +21,11 @@
 __author__    = """Stefan Eletzhofer <se@nexiles.de>"""
 __docformat__ = 'plaintext'
 
-import os
-import json
-import urllib
 import logging
 import argparse
 import urlparse
-import httplib2
+
+from sealjet.tool.api import API
 
 logger = logging.getLogger("sealjet.tool")
 
@@ -38,19 +36,6 @@ def setup_logging(log_path="sealjet_tool.log", level=logging.DEBUG):
             format="%(asctime)s: %(name)s: %(levelname)s: %(message)s"
             )
 
-def q(v, *a, **kw):
-    if type(v) == unicode:
-        v = v.encode("utf-8")
-    return urllib.quote_plus(v, *a, **kw)
-
-def safe_unicode(v):
-    if type(v) == str:
-        return v
-    elif type(v) == unicode:
-        return v
-    else:
-        return str(v)
-
 def is_url(string):
     scheme, netloc, path, query, fragment = urlparse.urlsplit(string)
     if not scheme:
@@ -59,74 +44,22 @@ def is_url(string):
         raise argparse.ArgumentTypeError("'%s' contains query args or a fragment part -- please remove these." % string)
     return string
 
-class API(object):
 
-    def __init__(self, url, username, password):
-        self.username = username
-        self.password = password
-        self.url = url
+def do_query_import(api, args):
+    logger.info("query_import: username=%s partnumber=%s" % (args.username, args.partnumber))
+    print api.query_import(args.username, args.partnumber)
 
-        self.http = httplib2.Http()
+def do_import(api, args):
+    pass
 
-        self.plone_login()
+def do_export(api, args):
+    pass
 
-        # default headers
-        self.headers = {
-                "Cookie": self.auth_cookie
-        }
+def do_unlock_design(api, args):
+    pass
 
-    def plone_login(self):
-        url = self.url + "/login_form"
-        headers =  {"User-agent" : "Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)",
-                    "Content-type": "application/x-www-form-urlencoded",
-                    "Accept": "text/plain"}
-        params = {'came_from': url,
-                  'form.submitted': '1',
-                  'js_enabled': '0',
-                  'cookies_enabled': '',
-                  'login_name': '',
-                  'pwd_empty': '0',
-                  '__ac_name': self.username,
-                  '__ac_password': self.password,
-                  'submit': 'Log in'}
-        resp, content = self.http.request(url, "POST", body=urllib.urlencode(params), headers=headers)
-        self.auth_cookie = resp['set-cookie']
-
-    def request(self, api_method, body=None, **kwargs):
-        logger.debug("REQUEST: %s %s" % (api_method, kwargs))
-        headers = dict()
-        headers.update(self.headers)
-
-        if body:
-            headers["Content-Length"] = str(len(body))
-        else:
-            headers["Content-Length"] = "0"
-
-        params = ["m=%s" % api_method, ]
-        for key in sorted(kwargs.keys()):
-            value = kwargs[key]
-            value = safe_unicode(value)
-            params.append("%s=%s" % (key, q(value)))
-
-        path = "@@API?%s" % "&".join(params)
-        url = os.path.join(self.url, path)
-
-        logger.debug("path=%s" % path)
-        logger.debug("url=%s" % url)
-
-        response, content = self.http.request(
-                url,
-                "GET",
-                body,
-                headers)
-
-        logger.debug("RESPONSE: %s content: %d bytes." % (response.status, len(content)))
-        return response, content
-
-    def query_import(self, username, partnumber):
-        response, content = self.request("query_import", username=username, partnumber=partnumber)
-        assert response.status == 200
-        return json.loads(content)
+def do_lock_design(api, args):
+    pass
 
 def main():
     parser = argparse.ArgumentParser()
@@ -136,6 +69,34 @@ def main():
     parser.add_argument("-p", "--password", required=True, help="the password")
     parser.add_argument("-U", "--url", required=True, type=is_url, help="the base URL to the sealjet PDM system's root cabinet")
 
+    subparsers = parser.add_subparsers()
+    
+    parser_query_import = subparsers.add_parser("query-import")
+    #parser_query_import.add_argument("username")
+    parser_query_import.add_argument("partnumber")
+    parser_query_import.set_defaults(command=do_query_import)
+
+    parser_import = subparsers.add_parser("import")
+    #parser_import.add_argument("username")
+    parser_import.add_argument("partnumber")
+    parser_import.set_defaults(command=do_import)
+
+    parser_export = subparsers.add_parser("export")
+    #parser_export.add_argument("username")
+    parser_export.add_argument("partnumber")
+    parser_export.add_argument("-V", "--version", dest="version")
+    parser_export.set_defaults(command=do_export)
+
+    parser_unlock_design = subparsers.add_parser("unlock-design")
+    #parser_unlock_design.add_argument("username")
+    parser_unlock_design.add_argument("partnumber")
+    parser_unlock_design.set_defaults(command=do_unlock_design)
+
+    parser_lock_design = subparsers.add_parser("lock-design")
+    #parser_lock_design.add_argument("username")
+    parser_lock_design.add_argument("partnumber")
+    parser_lock_design.set_defaults(command=do_unlock_design)
+
     args = parser.parse_args()
     setup_logging(log_path=args.logfile, level=args.loglevel)
 
@@ -143,8 +104,7 @@ def main():
     logger.debug("Start")
 
     api = API(args.url, args.username, args.password)
-
-    print api.query_import("fred@example.com", "washer")
+    args.command(api, args)
 
     logger.debug("Stop")
     logger.debug("-"*70)
