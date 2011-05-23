@@ -59,7 +59,9 @@ class API(object):
         }
 
     def plone_login(self):
+        logger.debug("login to plone")
         url = self.url + "/login_form"
+        logger.debug("url: %r" % url)
         headers =  {"User-agent" : "Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)",
                     "Content-type": "application/x-www-form-urlencoded",
                     "Accept": "text/plain"}
@@ -72,7 +74,12 @@ class API(object):
                   '__ac_name': self.username,
                   '__ac_password': self.password,
                   'submit': 'Log in'}
+
+        logger.debug("headers: %r" % headers)
+        logger.debug("params: %r" % params)
         resp, content = self.http.request(url, "POST", body=urllib.urlencode(params), headers=headers)
+        logger.debug("response: %r" % resp)
+
         self.auth_cookie = resp['set-cookie']
 
     def request(self, api_method, body=None, **kwargs):
