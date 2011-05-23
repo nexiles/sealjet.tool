@@ -95,8 +95,9 @@ class API(object):
         params = ["m=%s" % api_method, ]
         for key in sorted(kwargs.keys()):
             value = kwargs[key]
-            value = safe_unicode(value)
-            params.append("%s=%s" % (key, q(value)))
+            if value is not None:
+                value = safe_unicode(value)
+                params.append("%s=%s" % (key, q(value)))
 
         path = "@@API?%s" % "&".join(params)
         url = os.path.join(self.url, path)
