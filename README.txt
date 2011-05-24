@@ -4,7 +4,7 @@ Projekt: sealjet.tool
 
 :Author:   Stefan Eletzhofer
 :Date:     2011-05-24
-:Version:  0.2dev
+:Version:  0.2
 
 Abstract
 ========
@@ -53,7 +53,7 @@ Each of the subcommands has it's own help accessible using the `-h` option.
 Changes
 =======
 
-0.2 - unreleased
+0.2 - 2011-05-24
 ----------------
 
 - BUGFIX: fix lock/unlock https://github.com/seletz/sealjet.content/issues/4
