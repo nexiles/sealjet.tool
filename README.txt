@@ -1,18 +1,26 @@
-Introduction
-============
+=====================
+Projekt: sealjet.tool
+=====================
+
+:Author:   Stefan Eletzhofer
+:Date:     2011-05-24
+:Version:  0.2
+
+Abstract
+========
 
 This package contains an command line tool to the sealjet PDM
 system.
 
 Installation
-------------
+============
 
 Install the package as usual.  Preferred installation method is
 to add the package to the sealjet PDM main buildout.  Once installed,
 teh setup will create a `sealjetpdm` executable/script.
 
 Usage
------
+=====
 
 The `sealjetpdm` tool's usage is as follows::
 
@@ -41,3 +49,18 @@ There are several subcommands:
 - **unlock-design**
 
 Each of the subcommands has it's own help accessible using the `-h` option.
+
+Changes
+=======
+
+0.2 - 2011-05-24
+----------------
+
+- BUGFIX: fix lock/unlock https://github.com/seletz/sealjet.content/issues/4
+
+0.1 - ????-??-??
+----------------
+
+- first revision
+
+..  vim: set ft=rst tw=75 nocin nosi ai sw=4 ts=4 expandtab:

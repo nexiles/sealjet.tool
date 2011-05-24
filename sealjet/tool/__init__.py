@@ -95,7 +95,7 @@ def main():
     parser_lock_design = subparsers.add_parser("lock-design")
     #parser_lock_design.add_argument("username")
     parser_lock_design.add_argument("partnumber")
-    parser_lock_design.set_defaults(command=do_unlock_design)
+    parser_lock_design.set_defaults(command=do_lock_design)
 
     args = parser.parse_args()
     setup_logging(log_path=args.logfile, level=args.loglevel)
