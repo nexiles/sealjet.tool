@@ -1,9 +1,9 @@
-========================
-Projekt: sealjet.content
-========================
+=====================
+Projekt: sealjet.tool
+=====================
 
 :Author:   Stefan Eletzhofer
-:Date:     2011-05-23
+:Date:     2011-05-24
 :Version:  0.2dev
 
 Abstract
