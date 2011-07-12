@@ -3,8 +3,8 @@ Projekt: sealjet.tool
 =====================
 
 :Author:   Stefan Eletzhofer
-:Date:     2011-05-24
-:Version:  0.2
+:Date:     2011-07-12
+:Version:  0.3
 
 Abstract
 ========
@@ -52,6 +52,11 @@ Each of the subcommands has it's own help accessible using the `-h` option.
 
 Changes
 =======
+
+0.3 - 2011-07-12
+----------------
+
+no changes yet.
 
 0.2 - 2011-05-24
 ----------------
